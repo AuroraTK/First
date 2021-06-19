@@ -1,0 +1,48 @@
+#include <iostream>
+using namespace std;
+//定义无返回值的函数指针别名类型
+typedef void (*t)();
+class A
+{
+    public:
+		virtual void f1() {cout<<"f1 of A"<<endl;}
+		virtual void f2() {cout<<"f2 of A"<<endl;}
+		virtual void f3() {cout<<"f3 of A"<<endl;}
+};
+class B:public A
+{
+    public:
+		virtual void f1() {cout<<"f1 of B"<<endl;}
+		virtual void f2() {cout<<"f2 of B"<<endl;}
+		virtual void f3() {cout<<"f3 of B"<<endl;}
+};
+void fun(A &pa,int num)
+{
+	cout<<"访问A类中的虚函数:"<<endl;
+	for(int i=0;i<num;i++)
+	{
+		//将对象数组中指向虚基类的指针类型转换为int*
+	int *p=(int*)&pa;
+		//定义函数指针变量，并赋与虚基类表中的指针的地址
+	t pt=*((t*)*p+i);
+	pt();
+	}
+}
+void fun(B &pa,int num)
+{
+	cout<<"访问B类的虚函数:"<<endl;
+	for(int i=0;i<num;i++)
+	{
+	int *p=(int*)&pa;
+	t pt=*((t*)*p+i);
+	pt();
+	}
+}
+int main()
+{
+	A obja;
+	B objb;
+	fun(obja,3);
+	fun(objb,3);
+	return 0;
+}
